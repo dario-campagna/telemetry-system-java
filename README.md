@@ -1,4 +1,4 @@
-#TelemetrySystem exercise
+# TelemetrySystem exercise
 
 Write the unit tests for the TelemetryDiagnosticControls class. The responsibility of the TelemetryDiagnosticControls class 
 is to establish a connection to the telemetry server (through the TelemetryClient), send a diagnostic request and 
