@@ -3,6 +3,7 @@ package it.esteco.telemetrysystem;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 public class TelemetryDiagnosticControlsTest {
 
@@ -27,4 +28,23 @@ public class TelemetryDiagnosticControlsTest {
         telemetryDiagnosticControls.checkTransmission();
         assertEquals(EXPECTED_DIAGNOSTIC_INFO, telemetryDiagnosticControls.getDiagnosticInfo());
     }
+
+    @Test
+    public void receiveResponse() throws Exception {
+        TelemetryClient telemetryClient = mock(TelemetryClient.class);
+        when(telemetryClient.getOnlineStatus()).thenReturn(true);
+        when(telemetryClient.receive()).thenReturn("a");
+
+        TelemetryDiagnosticControls telemetryDiagnosticControls = new TelemetryDiagnosticControls(telemetryClient);
+
+        telemetryDiagnosticControls.checkTransmission();
+
+        inOrder(telemetryClient).verify(telemetryClient).disconnect();
+        inOrder(telemetryClient).verify(telemetryClient, times(2)).getOnlineStatus();
+        inOrder(telemetryClient).verify(telemetryClient).send(anyString());
+        inOrder(telemetryClient).verify(telemetryClient).receive();
+
+        assertEquals("a", telemetryDiagnosticControls.getDiagnosticInfo());
+    }
+
 }
