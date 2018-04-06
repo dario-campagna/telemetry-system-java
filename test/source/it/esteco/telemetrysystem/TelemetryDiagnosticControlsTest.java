@@ -44,6 +44,7 @@ public class TelemetryDiagnosticControlsTest {
 
         telemetryDiagnosticControls.checkTransmission();
 
+        inOrder(telemetryClient).verify(telemetryClient).disconnect();
         inOrder(telemetryClient).verify(telemetryClient).connect(anyString());
         inOrder(telemetryClient).verify(telemetryClient).send(anyString());
         inOrder(telemetryClient).verify(telemetryClient).receive();
@@ -63,6 +64,7 @@ public class TelemetryDiagnosticControlsTest {
 
         telemetryDiagnosticControls.checkTransmission();
 
+        inOrder(telemetryClient).verify(telemetryClient).disconnect();
         inOrder(telemetryClient).verify(telemetryClient).connect(anyString());
     }
 }

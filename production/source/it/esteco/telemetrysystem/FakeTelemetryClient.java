@@ -9,17 +9,10 @@ public class FakeTelemetryClient implements TelemetryClient {
     private String diagnosticMessageResult = "";
 
     @Override
-    public boolean getOnlineStatus() {
-        return onlineStatus;
-    }
-
-    @Override
     public boolean connect(String telemetryServerConnectionString) {
         if (telemetryServerConnectionString == null || "".equals(telemetryServerConnectionString)) {
             throw new IllegalArgumentException();
         }
-
-        disconnect();
 
         int retryLeft = 3;
         boolean success = false;

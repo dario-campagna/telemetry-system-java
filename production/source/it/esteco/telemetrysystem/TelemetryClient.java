@@ -1,7 +1,6 @@
 package it.esteco.telemetrysystem;
 
 public interface TelemetryClient {
-    boolean getOnlineStatus();
 
     boolean connect(String telemetryServerConnectionString);
 
