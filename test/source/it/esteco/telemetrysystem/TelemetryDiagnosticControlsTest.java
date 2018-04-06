@@ -1,11 +1,16 @@
 package it.esteco.telemetrysystem;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class TelemetryDiagnosticControlsTest {
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     private static final String EXPECTED_DIAGNOSTIC_INFO = "LAST TX rate................ 100 MBPS\r\n"
             + "HIGHEST TX rate............. 100 MBPS\r\n"
@@ -47,4 +52,19 @@ public class TelemetryDiagnosticControlsTest {
         assertEquals("a", telemetryDiagnosticControls.getDiagnosticInfo());
     }
 
+    @Test
+    public void connectionFail() throws Exception {
+        expectedException.expect(Exception.class);
+        expectedException.expectMessage("Unable to connect.");
+
+        TelemetryClient telemetryClient = mock(TelemetryClient.class);
+        when(telemetryClient.getOnlineStatus()).thenReturn(false);
+
+        TelemetryDiagnosticControls telemetryDiagnosticControls = new TelemetryDiagnosticControls(telemetryClient);
+
+        telemetryDiagnosticControls.checkTransmission();
+
+        inOrder(telemetryClient).verify(telemetryClient).disconnect();
+        inOrder(telemetryClient).verify(telemetryClient, times(4)).getOnlineStatus();
+    }
 }
