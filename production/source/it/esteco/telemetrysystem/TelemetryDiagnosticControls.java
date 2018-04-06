@@ -2,6 +2,7 @@ package it.esteco.telemetrysystem;
 
 public class TelemetryDiagnosticControls {
 
+    public static final String DIAGNOSTIC_MESSAGE = "AT#UD";
     private static final String DIAGNOSTIC_CHANNEL_CONNECTION_STRING = "*111#";
 
     private final TelemetryClient telemetryClient;
@@ -34,7 +35,7 @@ public class TelemetryDiagnosticControls {
             throw new Exception("Unable to connect.");
         }
 
-        telemetryClient.send(FakeTelemetryClient.DIAGNOSTIC_MESSAGE);
+        telemetryClient.send(DIAGNOSTIC_MESSAGE);
         diagnosticInfo = telemetryClient.receive();
     }
 

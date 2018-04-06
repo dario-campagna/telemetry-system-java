@@ -4,8 +4,6 @@ import java.util.Random;
 
 public class FakeTelemetryClient implements TelemetryClient {
 
-    public static final String DIAGNOSTIC_MESSAGE = "AT#UD";
-
     private final Random connectionEventsSimulator = new Random(42);
     private boolean onlineStatus;
     private String diagnosticMessageResult = "";
@@ -38,7 +36,7 @@ public class FakeTelemetryClient implements TelemetryClient {
             throw new IllegalArgumentException();
         }
 
-        if (message == DIAGNOSTIC_MESSAGE) {
+        if (message == TelemetryDiagnosticControls.DIAGNOSTIC_MESSAGE) {
             // simulate a status report
             diagnosticMessageResult =
                     "LAST TX rate................ 100 MBPS\r\n"
