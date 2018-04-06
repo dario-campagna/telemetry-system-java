@@ -23,20 +23,14 @@ public class TelemetryDiagnosticControls {
     public void checkTransmission() throws Exception {
         diagnosticInfo = "";
 
-        telemetryClient.disconnect();
+        boolean isConnected = telemetryClient.connect(DIAGNOSTIC_CHANNEL_CONNECTION_STRING);
 
-        int retryLeft = 3;
-        while (telemetryClient.getOnlineStatus() == false && retryLeft > 0) {
-            telemetryClient.connect(DIAGNOSTIC_CHANNEL_CONNECTION_STRING);
-            retryLeft -= 1;
-        }
-
-        if (telemetryClient.getOnlineStatus() == false) {
+        if (isConnected) {
+            telemetryClient.send(DIAGNOSTIC_MESSAGE);
+            diagnosticInfo = telemetryClient.receive();
+        } else {
             throw new Exception("Unable to connect.");
         }
-
-        telemetryClient.send(DIAGNOSTIC_MESSAGE);
-        diagnosticInfo = telemetryClient.receive();
     }
 
 }

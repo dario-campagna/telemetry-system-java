@@ -14,15 +14,24 @@ public class FakeTelemetryClient implements TelemetryClient {
     }
 
     @Override
-    public void connect(String telemetryServerConnectionString) {
+    public boolean connect(String telemetryServerConnectionString) {
         if (telemetryServerConnectionString == null || "".equals(telemetryServerConnectionString)) {
             throw new IllegalArgumentException();
         }
 
-        // simulate the operation on a real modem
-        boolean success = connectionEventsSimulator.nextInt(10) <= 8;
+        disconnect();
+
+        int retryLeft = 3;
+        boolean success = false;
+
+        while (success == false && retryLeft > 0) {
+            // simulate the operation on a real modem
+            success = connectionEventsSimulator.nextInt(10) <= 8;
+            retryLeft -= 1;
+        }
 
         onlineStatus = success;
+        return onlineStatus;
     }
 
     @Override

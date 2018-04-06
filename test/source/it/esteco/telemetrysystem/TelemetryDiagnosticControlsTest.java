@@ -37,15 +37,14 @@ public class TelemetryDiagnosticControlsTest {
     @Test
     public void receiveResponse() throws Exception {
         TelemetryClient telemetryClient = mock(TelemetryClient.class);
-        when(telemetryClient.getOnlineStatus()).thenReturn(true);
+        when(telemetryClient.connect(anyString())).thenReturn(true);
         when(telemetryClient.receive()).thenReturn("a");
 
         TelemetryDiagnosticControls telemetryDiagnosticControls = new TelemetryDiagnosticControls(telemetryClient);
 
         telemetryDiagnosticControls.checkTransmission();
 
-        inOrder(telemetryClient).verify(telemetryClient).disconnect();
-        inOrder(telemetryClient).verify(telemetryClient, times(2)).getOnlineStatus();
+        inOrder(telemetryClient).verify(telemetryClient).connect(anyString());
         inOrder(telemetryClient).verify(telemetryClient).send(anyString());
         inOrder(telemetryClient).verify(telemetryClient).receive();
 
@@ -58,13 +57,12 @@ public class TelemetryDiagnosticControlsTest {
         expectedException.expectMessage("Unable to connect.");
 
         TelemetryClient telemetryClient = mock(TelemetryClient.class);
-        when(telemetryClient.getOnlineStatus()).thenReturn(false);
+        when(telemetryClient.connect(anyString())).thenReturn(false);
 
         TelemetryDiagnosticControls telemetryDiagnosticControls = new TelemetryDiagnosticControls(telemetryClient);
 
         telemetryDiagnosticControls.checkTransmission();
 
-        inOrder(telemetryClient).verify(telemetryClient).disconnect();
-        inOrder(telemetryClient).verify(telemetryClient, times(4)).getOnlineStatus();
+        inOrder(telemetryClient).verify(telemetryClient).connect(anyString());
     }
 }
