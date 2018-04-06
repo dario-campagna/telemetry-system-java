@@ -23,7 +23,7 @@ public class TelemetryDiagnosticControlsTest {
 
     @Test
     public void sendDiagnosticMessageAndReceiveStatusResponse() throws Exception {
-        TelemetryDiagnosticControls telemetryDiagnosticControls = new TelemetryDiagnosticControls();
+        TelemetryDiagnosticControls telemetryDiagnosticControls = new TelemetryDiagnosticControls(new FakeTelemetryClient());
         telemetryDiagnosticControls.checkTransmission();
         assertEquals(EXPECTED_DIAGNOSTIC_INFO, telemetryDiagnosticControls.getDiagnosticInfo());
     }
